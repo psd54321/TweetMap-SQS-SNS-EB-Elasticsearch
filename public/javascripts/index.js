@@ -54,7 +54,9 @@ function closeWidget() {
     $(".widget-pane").addClass("widget-hide");
 }
 
-
+socket.on('tweet', function (data) {
+    console.log(data);
+  });
 
 function putMarkers(searchterm, map) {
     clearOverlays();

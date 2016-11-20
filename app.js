@@ -120,6 +120,7 @@ io.on('connection', function (socket) {
     if (connectedCount == 1) {
         stream.start();
         console.log('Strem started');
+        io.sockets.emit('tweet','message sent');
     }
 
     socket.on('disconnect', function () {
