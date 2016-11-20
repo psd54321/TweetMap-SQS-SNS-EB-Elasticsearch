@@ -1,6 +1,6 @@
 var map;
 var markers = [];
-var socket = io.connect('http://52.23.222.28/3000');
+var socket = io.connect();
 
 function initMap() {
 
