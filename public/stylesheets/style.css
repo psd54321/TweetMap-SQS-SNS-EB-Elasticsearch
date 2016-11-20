@@ -1,0 +1,335 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding-top: 25px;
+}
+
+#map {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.map-control {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+    font-family: 'Roboto', 'sans-serif';
+    margin: 10px;
+    /* Hide the control initially, to prevent it from appearing
+       before the map loads. */
+    display: none;
+}
+
+
+/* Display the control once it is inside the map. */
+
+#map .map-control {
+    display: block;
+}
+
+.selector-control {
+    font-size: 14px;
+    line-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.widget-content-margin {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+
+/* On mouse-over, add a deeper shadow */
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.scrollable-x,
+.scrollable-y {
+    outline-offset: -2px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.widget-pane-visible {
+    opacity: 1;
+    height: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.widget-pane {
+    width: 408px;
+    position: absolute;
+    top: 0;
+    z-index: 3;
+    opacity: 0;
+    height: 0;
+    right: 0;
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
+    transition-property: -webkit-transform, transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.widget-pane-visible {
+    opacity: 1;
+    top: 50px;
+    height: calc(100% - 50px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.widget-hide {
+    display: none;
+}
+
+.widget-pane-content {
+    background-color: #fafafa;
+}
+
+.widget-pane-content,
+.widget-pane-content-shim {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.widget-pane-content-holder {
+    display: block;
+    text-align: left;
+    overflow: visible;
+    position: absolute;
+    height: 100%;
+    width: 408px;
+}
+
+.widget-pane-content-shim {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.widget-pane-content,
+.widget-pane-content-shim {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+body {
+    margin: 40px 60px;
+    background: #555;
+}
+
+.sb-search {
+    position: relative;
+    margin-top: 10px;
+    width: 0%;
+    min-width: 60px;
+    height: 60px;
+    float: left;
+    overflow: hidden;
+    -webkit-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    transition: width 0.3s;
+    -webkit-backface-visibility: hidden;
+}
+
+.sb-search-input {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    border: none;
+    outline: none;
+    background: #fff;
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    z-index: 10;
+    padding: 20px 65px 20px 20px;
+    font-family: inherit;
+    font-size: 20px;
+    color: #2c3e50;
+}
+
+input[type="search"].sb-search-input {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+}
+
+.sb-search-input::-webkit-input-placeholder {
+    color: #efb480;
+}
+
+.sb-search-input:-moz-placeholder {
+    color: #efb480;
+}
+
+.sb-search-input::-moz-placeholder {
+    color: #efb480;
+}
+
+.sb-search-input:-ms-input-placeholder {
+    color: #efb480;
+}
+
+.sb-icon-search,
+.sb-search-submit {
+    width: 60px;
+    height: 60px;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    line-height: 60px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sb-search-submit {
+    background: #fff;
+    /* IE needs this */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    /* IE 8 */
+    filter: alpha(opacity=0);
+    /* IE 5-7 */
+    opacity: 0;
+    color: transparent;
+    color: red;
+    border: none;
+    outline: none;
+    z-index: -1;
+}
+
+.sb-icon-search {
+    color: #fff;
+    background: #e67e22;
+    z-index: 90;
+    font-size: 22px;
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sb-icon-search:before {
+    content: "";
+}
+
+.sb-search.sb-search-open,
+.no-js .sb-search {
+    width: 100%;
+}
+
+.sb-search.sb-search-open .sb-icon-search,
+.no-js .sb-search .sb-icon-search {
+    background: #da6d0d;
+    color: #fff;
+    z-index: 11;
+}
+
+.sb-search.sb-search-open .sb-search-submit,
+.no-js .sb-search .sb-search-submit {
+    /*    z-index: 90;*/
+}
+
+.widget-pane-content-holder .list-group .list-group-item {
+    border: none;
+}
+
+.green-oval {
+    width: 15px;
+    height: 15px;
+    background-color: #7ed321;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.orange-oval {
+    width: 15px;
+    height: 15px;
+    background-color: #f5a623;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.red-oval {
+    width: 15px;
+    height: 15px;
+    background-color: #d0021b;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.line {
+    width: 426px;
+    height: 2px;
+    border: solid 1px #f0f0f0;
+}
+
+.select-style {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    width: 150px;
+    height:40px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #fff;
+    background: #fff;
+    position: relative;
+}
+
+.select-style:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    height:40px;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}
