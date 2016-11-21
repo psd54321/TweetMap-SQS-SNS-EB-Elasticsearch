@@ -57,7 +57,7 @@ router.post('/notify', function (req, res) {
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
         var subscribeURL = req.body.SubscribeURL;
-        console.log(req);
+        console.log(req.params);
         console.log('after url');
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
@@ -66,7 +66,7 @@ router.post('/notify', function (req, res) {
                 io.sockets.emit('tweet','message sent subscription confirmed');
             });
         }).on('error', function(e) {
-             io.sockets.emit('tweet','message sent notify error');
+             //io.sockets.emit('tweet','message sent notify error');
             console.log(e);
         });
     } else {
