@@ -47,29 +47,29 @@ router.get('/search/:searchq', function (req, res) {
 });
 
 router.post('/notify', function (req, res) {
-    io =res.io;
+    //io =res.io;
      //io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
     if(req.get('x-amz-sns-message-type') == 'Notification') {
         var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
-        io.sockets.emit('tweet','message sent notification'+tweet);
+        //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         //io.sockets.emit('tweet','message sent subscription inside');
         var subscribeURL = JSON.parse(req.body).SubscribeURL;
-        io.sockets.emit('tweet','message sent subscription inside'+subscribeURL);
+        //io.sockets.emit('tweet','message sent subscription inside'+subscribeURL);
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
             res.on('data', function(chunk) {
                 console.log('' + chunk);
-                io.sockets.emit('tweet','message sent subscription confirmed');
+                //io.sockets.emit('tweet','message sent subscription confirmed');
             });
         }).on('error', function(e) {
-             io.sockets.emit('tweet','message sent notify error');
+             //io.sockets.emit('tweet','message sent notify error');
             console.log(e);
         });
     } else {
         console.log('Illegal Notification Received');
-         io.sockets.emit('tweet','message sent notify illegal');
+         //io.sockets.emit('tweet','message sent notify illegal');
     }
 });
 
