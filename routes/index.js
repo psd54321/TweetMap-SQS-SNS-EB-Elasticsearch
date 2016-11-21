@@ -21,7 +21,8 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
-    
+     io =global.socketio;
+     io.sockets.emit('tweet','message sent search');
      var elasticsearch = new Elasticsearch({
         accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
         secretAccessKey: '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',
