@@ -18,6 +18,8 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
+    io =res.io;
+    io.sockets.emit('tweet','message sent search');
      var elasticsearch = new Elasticsearch({
         accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
         secretAccessKey: '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',
@@ -43,5 +45,10 @@ router.get('/search/:searchq', function (req, res) {
 
 });
 
+router.post('/notify', function (req, res) {
+    io =res.io;
+    io.sockets.emit('tweet','message sent notify');
+    console.log(req.body);
+});
 
 module.exports = router;
