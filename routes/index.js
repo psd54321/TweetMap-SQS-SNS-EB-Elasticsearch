@@ -47,8 +47,8 @@ router.get('/search/:searchq', function (req, res) {
 });
 
 router.post('/notify', function (req, res) {
-    //io =res.io;
-     //io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
+    io =res.io;
+     io.sockets.emit('tweet','message sent notify before if '+JSON.stringify(JSON.parse(req.body).SubscribeURL));
     if(req.get('x-amz-sns-message-type') == 'Notification') {
         var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
