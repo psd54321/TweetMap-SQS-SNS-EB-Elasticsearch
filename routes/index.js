@@ -51,19 +51,12 @@ router.get('/search/:searchq', function (req, res) {
 router.post('/notify', function (req, res) {
     io =res.io;
      //io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
-      //io.sockets.emit('tweet','message sent notify before if '+JSON.parse(req.body).SubscribeURL);
-     validator.validate(JSON.parse(req.body),function (err,message){
-         io.sockets.emit('tweet','message sent notify inside');
-        if (err) {
-          console.log(err.message);
-          res.statusCode = 403;
-          res.end('Invalid message\n');
-        }
-        else if(message['Type'] == 'Notification') {
+    if(req.get('x-amz-sns-message-type') == 'Notification') {
         var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
         io.sockets.emit('tweet','message sent notification'+tweet);
-    } else if(message['Type'] == 'SubscriptionConfirmation') {
+    } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
+        io.sockets.emit('tweet','message sent subscription inside');
         var subscribeURL = JSON.parse(req.body).SubscribeURL;
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
@@ -79,9 +72,6 @@ router.post('/notify', function (req, res) {
         console.log('Illegal Notification Received');
          io.sockets.emit('tweet','message sent notify illegal');
     }
-
-     });
-    
 });
 
 module.exports = router;
