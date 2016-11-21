@@ -57,11 +57,11 @@ router.post('/notify', function (req, res) {
           res.statusCode = 403;
           res.end('Invalid message\n');
         }
-        else if(req.get('x-amz-sns-message-type') == 'Notification') {
+        else if(message['Type'] == 'Notification') {
         var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
         io.sockets.emit('tweet','message sent notification'+tweet);
-    } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
+    } else if(message['Type'] == 'SubscriptionConfirmation') {
         var subscribeURL = JSON.parse(req.body).SubscribeURL;
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
