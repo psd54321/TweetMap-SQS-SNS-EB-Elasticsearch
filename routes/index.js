@@ -3,6 +3,9 @@ var router = express.Router();
 var request = require("request");
 var Twitter = require('twit');
 var Elasticsearch = require('aws-es');
+var MessageValidator = require('sns-validator');
+var validator = new MessageValidator();
+validator.encoding = 'utf8';
 
 var client = new Twitter({
     consumer_key: '1hkOv5wjdTaqxsRM91FGwjkRU',
@@ -48,7 +51,13 @@ router.get('/search/:searchq', function (req, res) {
 router.post('/notify', function (req, res) {
     io =res.io;
      io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
-    if(req.get('x-amz-sns-message-type') == 'Notification') {
+     validator.validate(JSON.parse(req.body),function (err,message){
+        if (err) {
+          console.log(err.message);
+          res.statusCode = 403;
+          res.end('Invalid message\n');
+        }
+        else if(req.get('x-amz-sns-message-type') == 'Notification') {
         var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
         io.sockets.emit('tweet','message sent notification'+tweet);
@@ -68,6 +77,9 @@ router.post('/notify', function (req, res) {
         console.log('Illegal Notification Received');
          io.sockets.emit('tweet','message sent notify illegal');
     }
+
+     });
+    
 });
 
 module.exports = router;
