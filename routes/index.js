@@ -56,7 +56,7 @@ router.post('/notify', function (req, res) {
         //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
-        var subscribeURL = JSON.parse(req.body).SubscribeURL;
+        var subscribeURL = req.body.SubscribeURL;
         console.log(subscribeURL);
         console.log('after url');
         https.get(subscribeURL, function(res) {
