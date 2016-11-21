@@ -21,8 +21,6 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
-     io =global.socketio;
-     io.sockets.emit('tweet','message sent search');
      var elasticsearch = new Elasticsearch({
         accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
         secretAccessKey: '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',
@@ -49,13 +47,15 @@ router.get('/search/:searchq', function (req, res) {
 });
 
 router.post('/notify', function (req, res) {
-    io =global.socketio;
-     io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
+    console.log('inside notify');
+    console.log(req.get('x-amz-sns-message-type'));
     if(req.get('x-amz-sns-message-type') == 'Notification') {
-        var tweet = JSON.parse(JSON.parse(req.body).Message).text;
+        console.log('inside notification');
+                var tweet = JSON.parse(JSON.parse(req.body).Message).text;
         // extract sentiment info from DB
-        io.sockets.emit('tweet','message sent notification'+tweet);
+        //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
+        console.log('inside subscription');
         var subscribeURL = JSON.parse(req.body).SubscribeURL;
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
@@ -69,7 +69,7 @@ router.post('/notify', function (req, res) {
         });
     } else {
         console.log('Illegal Notification Received');
-         io.sockets.emit('tweet','message sent notify illegal');
+         //io.sockets.emit('tweet','message sent notify illegal');
     }
 });
 
