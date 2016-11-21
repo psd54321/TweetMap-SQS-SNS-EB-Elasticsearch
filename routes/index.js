@@ -57,16 +57,9 @@ router.post('/notify', function (req, res) {
         //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
-        var subscribeURL = JSON.parse(req.body).SubscribeURL;
+        var subscribeURL = JSON.parse(req.body).Token;
         console.log(subscribeURL);
-        https.get(subscribeURL, function(res) {
-            console.log('Subscription Confirmed!');
-            res.on('data', function(chunk) {
-                console.log('' + chunk);
-            });
-        }).on('error', function(e) {
-            console.log(e);
-        });
+        
 
     } else {
         console.log('Illegal Notification Received');
