@@ -52,6 +52,7 @@ router.post('/notify', function (req, res) {
     io =res.io;
      io.sockets.emit('tweet','message sent notify before if '+req.get('x-amz-sns-message-type'));
      validator.validate(JSON.parse(req.body),function (err,message){
+         io.sockets.emit('tweet','message sent notify inside');
         if (err) {
           console.log(err.message);
           res.statusCode = 403;
