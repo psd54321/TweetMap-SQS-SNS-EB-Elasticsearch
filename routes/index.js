@@ -49,12 +49,14 @@ router.get('/search/:searchq', function (req, res) {
 });
 
 router.post('/notify', function (req, res) {
+    var io = global.socketio;
     console.log('inside notify');
     console.log(req.get('x-amz-sns-message-type'));
     if(req.get('x-amz-sns-message-type') == 'Notification') {
         console.log('inside notification');
                 var tweet = JSON.parse(JSON.parse(req.body).Message).text;
                 console.log(tweet);
+                io.sockets.emit('tweet','message sent notification'+tweet);
         // extract sentiment info from DB
         //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
