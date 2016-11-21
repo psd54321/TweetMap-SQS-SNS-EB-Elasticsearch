@@ -241,12 +241,12 @@ var sns = new AWS.SNS();
 var snsSubscribeParams = {
     Protocol: 'http',
     TopicArn:  awsconfig.snsTopicARN,
-    Endpoint: 'http://104.162.65.16:3000/notify'
+    Endpoint: 'http://node-express-env.avpvzxmmka.us-east-1.elasticbeanstalk.com/notify'
 };
 
-//sns.subscribe(snsSubscribeParams, function (err, data) {
- //   console.log(data);
-//});
+sns.subscribe(snsSubscribeParams, function (err, data) {
+    console.log(data);
+});
 
 
 
