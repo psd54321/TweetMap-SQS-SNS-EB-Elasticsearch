@@ -6,6 +6,8 @@ var Elasticsearch = require('aws-es');
 var MessageValidator = require('sns-validator');
 var validator = new MessageValidator();
 validator.encoding = 'utf8';
+var AWS = require('aws-sdk');
+var sns = new AWS.SNS();
 
 var client = new Twitter({
     consumer_key: '1hkOv5wjdTaqxsRM91FGwjkRU',
@@ -57,8 +59,18 @@ router.post('/notify', function (req, res) {
         //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
-        var subscribeURL = JSON.parse(req.body).Token;
-        console.log(subscribeURL);
+        var token = JSON.parse(req.body).Token;
+        var arn = JSON.parse(req.body).TopicArn;
+
+        var params = {
+  Token: token, /* required */
+  TopicArn: arn
+};
+        sns.confirmSubscription(params, function(err, data) {
+  if (err) console.log(err, err.stack); // an error occurred
+  else     console.log(data);           // successful response
+});
+        //console.log(subscribeURL);
         
 
     } else {
