@@ -59,10 +59,12 @@ app.set('view engine', 'hbs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 
-app.use(function (req, res, next) {
-    res.io = io;
-    next();
-});
+//app.use(function (req, res, next) {
+ //   res.io = io;
+    //next();
+//});
+
+global.socketio = io;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
