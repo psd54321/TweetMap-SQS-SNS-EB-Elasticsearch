@@ -21,8 +21,6 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
-    io =res.io;
-    io.sockets.emit('tweet','message sent search');
      var elasticsearch = new Elasticsearch({
         accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
         secretAccessKey: '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',
@@ -56,7 +54,7 @@ router.post('/notify', function (req, res) {
         // extract sentiment info from DB
         io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
-        io.sockets.emit('tweet','message sent subscription inside');
+        //io.sockets.emit('tweet','message sent subscription inside');
         var subscribeURL = JSON.parse(req.body).SubscribeURL;
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
