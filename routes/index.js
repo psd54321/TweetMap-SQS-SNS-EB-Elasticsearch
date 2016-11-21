@@ -47,8 +47,25 @@ router.get('/search/:searchq', function (req, res) {
 
 router.post('/notify', function (req, res) {
     io =res.io;
-    io.sockets.emit('tweet','message sent notify');
-    console.log(req.body);
+    
+    if(req.get('x-amz-sns-message-type') == 'Notification') {
+        var tweet = JSON.parse(JSON.parse(req.body).Message).text;
+        // extract sentiment info from DB
+        io.sockets.emit('tweet','message sent notification'+tweet);
+    } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
+        var subscribeURL = JSON.parse(req.body).SubscribeURL;
+        https.get(subscribeURL, function(res) {
+            console.log('Subscription Confirmed!');
+            res.on('data', function(chunk) {
+                console.log('' + chunk);
+                io.sockets.emit('tweet','message sent subscription confirmed');
+            });
+        }).on('error', function(e) {
+            console.log(e);
+        });
+    } else {
+        console.log('Illegal Notification Received');
+    }
 });
 
 module.exports = router;
