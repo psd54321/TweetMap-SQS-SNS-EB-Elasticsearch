@@ -58,6 +58,7 @@ router.post('/notify', function (req, res) {
         console.log('inside subscription');
         var subscribeURL = req.body.SubscribeURL;
         console.log(req.get('Content-Length'));
+        console.log(req.body);
         console.log('after url');
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
