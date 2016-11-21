@@ -52,24 +52,22 @@ router.post('/notify', function (req, res) {
     if(req.get('x-amz-sns-message-type') == 'Notification') {
         console.log('inside notification');
                 var tweet = JSON.parse(JSON.parse(req.body).Message).text;
+                console.log(tweet);
         // extract sentiment info from DB
         //io.sockets.emit('tweet','message sent notification'+tweet);
     } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
-        var subscribeURL = req.body.SubscribeURL;
-        console.log(req.get('Content-Length'));
-        console.log(req.body);
-        console.log('after url');
+        var subscribeURL = JSON.parse(req.body).SubscribeURL;
+        console.log(subscribeURL);
         https.get(subscribeURL, function(res) {
             console.log('Subscription Confirmed!');
             res.on('data', function(chunk) {
                 console.log('' + chunk);
-                io.sockets.emit('tweet','message sent subscription confirmed');
             });
         }).on('error', function(e) {
-             //io.sockets.emit('tweet','message sent notify error');
             console.log(e);
         });
+
     } else {
         console.log('Illegal Notification Received');
          //io.sockets.emit('tweet','message sent notify illegal');
