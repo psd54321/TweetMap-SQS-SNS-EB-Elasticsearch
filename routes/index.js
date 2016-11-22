@@ -9,7 +9,7 @@ validator.encoding = 'utf8';
 var AWS = require('aws-sdk');
 var twitconfig = require('../config/twitconfig');
 var sns = new AWS.SNS();
-var awsconfig = require('./config/awsconfig');
+var awsconfig = require('../config/awsconfig');
 
 var client = new Twitter({
     consumer_key: twitconfig.consumer_key,
