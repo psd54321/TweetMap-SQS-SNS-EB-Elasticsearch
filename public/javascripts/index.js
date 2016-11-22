@@ -54,8 +54,9 @@ function closeWidget() {
     $(".widget-pane").addClass("widget-hide");
 }
 
-socket.on('tweet', function (data) {
-    console.log(data);
+socket.on('tweet', function (obj) {
+    console.log(obj);
+    var data = JSON.parse(JSON.stringify(obj));
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
     //if (combo.value == data.topic) {
