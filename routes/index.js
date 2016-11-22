@@ -59,8 +59,11 @@ router.post('/notify', function (req, res) {
     if (req.get('x-amz-sns-message-type') == 'Notification') {
         console.log('inside notification');
         var tweet = JSON.parse(JSON.parse(req.body).Message);
-        //console.log(tweet);
-
+        console.log(tweet);
+        console.log(tweet.user.name);
+        console.log(tweet.sentiment);
+        console.log(tweet.sentiscore);
+        console.log(tweet.geo);
         elasticsearch.index({
             index: 'twittersentimentanalysis',
             type: 'tweet',
