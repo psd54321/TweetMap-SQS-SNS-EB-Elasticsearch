@@ -59,7 +59,12 @@ socket.on('tweet', function (data) {
     //var data = JSON.parse(obj);
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
+    console.log(combo.value);
+    console.log(data.topic);
+    console.log(combo.value == data.topic);
+
     if (combo.value == data.topic) {
+        console.log('inside');
         var location = data['location'];
         console.log(location);
         console.log(location['coordinates']);
