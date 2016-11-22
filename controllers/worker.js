@@ -40,6 +40,7 @@ function TweetSentimentAnalysis(message) {
     for (i = 0; i < topics.length; i++) {
         if (lowercase.indexOf(topics[i]) != -1) {
             obj.topic = topics[i];
+            break;
         }
     }
 

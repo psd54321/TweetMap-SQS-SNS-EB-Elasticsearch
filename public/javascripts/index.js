@@ -75,7 +75,6 @@ socket.on('tweet', function (data) {
                 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
                 break;
             case "positive":
-                console.log('positive');
                 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
                 break;
             case "negative":
@@ -112,7 +111,7 @@ function putMarkers(searchterm, map) {
                         position: new google.maps.LatLng(tweets[i]._source.location.coordinates[0], tweets[i]._source.location.coordinates[1])
                     });
 
-                    switch (data.sentiment) {
+                    switch (tweets[i]._source.sentiment) {
                         case "neutral":
                             marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
                             break;

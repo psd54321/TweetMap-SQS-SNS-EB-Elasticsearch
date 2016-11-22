@@ -63,7 +63,6 @@ router.post('/notify', function (req, res) {
         console.log(tweet.username);
         console.log(tweet.sentiment);
         console.log(tweet.sentiscore);
-        console.log(tweet.geo);
         elasticsearch.index({
             index: 'twittersentimentanalysis',
             type: 'tweet',
