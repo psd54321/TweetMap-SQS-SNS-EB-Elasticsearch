@@ -56,7 +56,7 @@ function closeWidget() {
 
 socket.on('tweet', function (obj) {
     console.log(obj);
-    var data = JSON.parse(JSON.stringify(obj));
+    var data = JSON.parse(obj);
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
     //if (combo.value == data.topic) {
