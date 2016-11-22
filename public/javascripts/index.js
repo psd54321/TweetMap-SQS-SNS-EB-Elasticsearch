@@ -56,12 +56,7 @@ function closeWidget() {
 
 socket.on('tweet', function (data) {
     console.log(data);
-    //var data = JSON.parse(obj);
     var combo = document.getElementById('style-selector');
-    //putMarkers(combo.value, map);
-    console.log(combo.value);
-    console.log(data.topic);
-    console.log(combo.value == data.topic);
 
     if (combo.value == data.topic) {
         console.log('inside');
@@ -80,6 +75,7 @@ socket.on('tweet', function (data) {
                 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
                 break;
             case "positive":
+                console.log('positive');
                 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
                 break;
             case "negative":
@@ -89,7 +85,7 @@ socket.on('tweet', function (data) {
                 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
         }
         marker.info = new google.maps.InfoWindow({
-            content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p><p> Sentiment Score : " + tweets[i]._source.sentiscore + "</p>"
+            content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p><p> Sentiment Score : " + data.sentiscore + "</p>"
         });
 
         google.maps.event.addListener(marker, 'click', function () {
