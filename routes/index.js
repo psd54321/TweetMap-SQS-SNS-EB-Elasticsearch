@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
-     var elasticsearch = new Elasticsearch({
+    var elasticsearch = new Elasticsearch({
         accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
         secretAccessKey: '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',
         service: 'es',
@@ -52,32 +52,28 @@ router.post('/notify', function (req, res) {
     var io = global.socketio;
     console.log('inside notify');
     console.log(req.get('x-amz-sns-message-type'));
-    if(req.get('x-amz-sns-message-type') == 'Notification') {
+    if (req.get('x-amz-sns-message-type') == 'Notification') {
         console.log('inside notification');
-                var tweet = JSON.parse(JSON.parse(req.body).Message).text;
-                console.log(tweet);
-                io.sockets.emit('tweet','message sent notification'+tweet);
-        // extract sentiment info from DB
-        //io.sockets.emit('tweet','message sent notification'+tweet);
-    } else if(req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
+        var tweet = JSON.parse(JSON.parse(req.body).Message).text;
+        console.log(tweet);
+        io.sockets.emit('tweet', (JSON.parse(req.body).Message));
+       
+    } else if (req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
         var token = JSON.parse(req.body).Token;
         var arn = JSON.parse(req.body).TopicArn;
 
         var params = {
-  Token: token, /* required */
-  TopicArn: arn
-};
-        sns.confirmSubscription(params, function(err, data) {
-  if (err) console.log(err, err.stack); // an error occurred
-  else     console.log(data);           // successful response
-});
-        //console.log(subscribeURL);
-        
+            Token: token,
+            TopicArn: arn
+        };
+        sns.confirmSubscription(params, function (err, data) {
+            if (err) console.log(err, err.stack); // an error occurred
+            else console.log(data); // successful response
+        });
 
     } else {
         console.log('Illegal Notification Received');
-         //io.sockets.emit('tweet','message sent notify illegal');
     }
 });
 

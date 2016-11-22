@@ -31,15 +31,15 @@ var stream1 = client.stream('statuses/filter', {
     locations: ['-180', '-90', '180', '90']
 });
 
- var elasticsearch = new Elasticsearch({
-        accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
-        secretAccessKey: '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',
-        service: 'es',
-        region: 'us-east-1',
-        host: 'search-prathtweets-jqcnx3spdjo3rhy5zjzn4nusv4.us-east-1.es.amazonaws.com'
-    });
+var elasticsearch = new Elasticsearch({
+    accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
+    secretAccessKey: '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',
+    service: 'es',
+    region: 'us-east-1',
+    host: 'search-prathtweets-jqcnx3spdjo3rhy5zjzn4nusv4.us-east-1.es.amazonaws.com'
+});
 
- AWS.config.update({
+AWS.config.update({
     'accessKeyId': awsconfig.accessKey,
     'secretAccessKey': awsconfig.secretAccessKey,
     'region': awsconfig.region
@@ -60,14 +60,16 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 
 //app.use(function (req, res, next) {
- //   res.io = io;
-    //next();
+//   res.io = io;
+//next();
 //});
 
 global.socketio = io;
 app.use(bodyParser.text());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -106,15 +108,15 @@ app.use(function (err, req, res, next) {
 
 //initialize AWS SQS
 var attributes = {
-  "Version": "2016-10-17",
-  "Id": "Queue1_Policy_UUID",
-  "Statement": [
-    {
-      "Sid":"Queue1_AnonymousAccess_ReceiveMessage",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:*",
-      "Resource": "arn:aws:sqs:us-east-1:341233333632:psd281tweets"
+    "Version": "2016-10-17",
+    "Id": "Queue1_Policy_UUID",
+    "Statement": [
+        {
+            "Sid": "Queue1_AnonymousAccess_ReceiveMessage",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "sqs:*",
+            "Resource": "arn:aws:sqs:us-east-1:341233333632:psd281tweets"
     }
   ]
 };
@@ -127,44 +129,46 @@ var sqsSetParams = {
 };
 
 //set SQS attribute
-sqs.setQueueAttributes(sqsSetParams, function(err, data) {
+sqs.setQueueAttributes(sqsSetParams, function (err, data) {
     if (err) console.log(err, err.stack);
-     // an error occurred
+    // an error occurred
 });
 
 var sqsSendParams = {
     QueueUrl: awsconfig.queueUrl,
     MessageAttributes: {
-        someKey: { DataType: 'String', StringValue: "string"}
+        someKey: {
+            DataType: 'String',
+            StringValue: "string"
+        }
     }
 };
 
 
 
 stream1.on('tweet', function (tweet) {
-    if(stopped){
+    if (stopped) {
         stream1.stop();
     }
     if (tweet.geo != null) { // Insert into elastic search when tweet with location is found
 
-       // elasticsearch.index({
-            //index: 'twittersentiment',
-            //type: 'tweet',
-            //body: {
-                //'username': tweet.user.name,
-              //  'text': tweet.text,
-            //    'location': tweet.geo
-          //  }
+        // elasticsearch.index({
+        //index: 'twittersentiment',
+        //type: 'tweet',
+        //body: {
+        //'username': tweet.user.name,
+        //  'text': tweet.text,
+        //    'location': tweet.geo
+        //  }
         //}, function (err, data) {
-          //  console.log("Tweet " + " with location: " + JSON.stringify(tweet.geo.coordinates) + "inserted.");
+        //  console.log("Tweet " + " with location: " + JSON.stringify(tweet.geo.coordinates) + "inserted.");
 
         //});
         //console.log("@#$##%%");
         var obj = {
             'username': tweet.user.name,
-                'text': tweet.text,
-                'location': tweet.geo,
-            'keyword': 'food'
+            'text': tweet.text,
+            'location': tweet.geo
         };
 
         sqsSendParams.MessageBody = JSON.stringify(obj);
@@ -196,7 +200,7 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
         if (connectedCount == 0) {
             stream1.stop();
-            stopped =true;
+            stopped = true;
         }
     });
 });
@@ -231,8 +235,8 @@ var deleteMessageFromSQS = function (message) {
         QueueUrl: awsconfig.queueUrl,
         ReceiptHandle: message.ReceiptHandle
     };
-    sqs.deleteMessage(sqsDeleteParams, function(err, data) {
-       if (err) console.log(err);
+    sqs.deleteMessage(sqsDeleteParams, function (err, data) {
+        if (err) console.log(err);
     });
 };
 
@@ -240,7 +244,7 @@ var deleteMessageFromSQS = function (message) {
 var sns = new AWS.SNS();
 var snsSubscribeParams = {
     Protocol: 'http',
-    TopicArn:  awsconfig.snsTopicARN,
+    TopicArn: awsconfig.snsTopicARN,
     Endpoint: 'http://node-express-env.avpvzxmmka.us-east-1.elasticbeanstalk.com/notify'
 };
 

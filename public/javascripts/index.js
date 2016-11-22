@@ -56,7 +56,27 @@ function closeWidget() {
 
 socket.on('tweet', function (data) {
     console.log(data);
-  });
+    var combo = document.getElementById('style-selector');
+    //putMarkers(combo.value, map);
+    //if (combo.value == data.topic) {
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            position: new google.maps.LatLng(data.location.coordinates[0], data.location.coordinates[1])
+        });
+
+        marker.info = new google.maps.InfoWindow({
+            content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p>"
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            var marker_map = this.getMap();
+            this.info.open(marker_map, this);
+        });
+        markers.push(marker);
+    //}
+});
 
 function putMarkers(searchterm, map) {
     clearOverlays();
