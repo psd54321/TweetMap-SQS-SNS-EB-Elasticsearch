@@ -59,10 +59,7 @@ socket.on('tweet', function (data) {
     var combo = document.getElementById('style-selector');
 
     if (combo.value == data.topic) {
-        console.log('inside');
         var location = data['location'];
-        console.log(location);
-        console.log(location['coordinates']);
         marker = new google.maps.Marker({
             map: map,
             draggable: true,

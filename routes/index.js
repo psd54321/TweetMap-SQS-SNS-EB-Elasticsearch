@@ -54,15 +54,10 @@ router.get('/search/:searchq', function (req, res) {
 
 router.post('/notify', function (req, res) {
     var io = global.socketio;
-    console.log('inside notify');
-    console.log(req.get('x-amz-sns-message-type'));
     if (req.get('x-amz-sns-message-type') == 'Notification') {
-        console.log('inside notification');
+        
         var tweet = JSON.parse(JSON.parse(req.body).Message);
-        console.log(tweet);
-        console.log(tweet.username);
-        console.log(tweet.sentiment);
-        console.log(tweet.sentiscore);
+        
         elasticsearch.index({
             index: 'twittersentimentanalysis',
             type: 'tweet',
@@ -80,7 +75,7 @@ router.post('/notify', function (req, res) {
         io.sockets.emit('tweet', tweet);
 
     } else if (req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
-        console.log('inside subscription');
+        
         var token = JSON.parse(req.body).Token;
         var arn = JSON.parse(req.body).TopicArn;
 

@@ -50,9 +50,9 @@ function TweetSentimentAnalysis(message) {
             if (obj.sentiment == 'neutral') {
                 obj.sentiscore = 0;
             } else obj.sentiscore = response.docSentiment.score;
-            console.log(response.docSentiment.score);
+            
             snsPublishParams.Message = JSON.stringify(obj);
-            //  console.log('sentimentAnalysis done');
+            
             sns.publish(snsPublishParams, function (err, data) {
                 if (err) console.log(err);
             });
