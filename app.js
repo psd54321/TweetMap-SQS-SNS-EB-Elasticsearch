@@ -140,7 +140,7 @@ var sqsSendParams = {
 };
 
 
-
+//Twitter stream
 stream1.on('tweet', function (tweet) {
     if (stopped) {
         stream1.stop();
@@ -165,7 +165,7 @@ stream1.on('tweet', function (tweet) {
 
 
 
-
+// Handle stream open close based on connected sockets
 io.on('connection', function (socket) {
     connectedCount++;
     console.log(connectedCount);

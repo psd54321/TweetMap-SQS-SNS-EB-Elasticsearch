@@ -1,9 +1,9 @@
 {
-    "accessKey": "AKIAIVRI3JUCHHHOE4VQ",
-    "secretAccessKey": "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",
-    "region": "us-east-1",
-    "queueUrl": "https://sqs.us-east-1.amazonaws.com/341233333632/psd281tweets",
-    "snsTopicARN": "arn:aws:sns:us-east-1:341233333632:tweets",
-    "elasticsearchendpoint": "search-prathtweets-jqcnx3spdjo3rhy5zjzn4nusv4.us-east-1.es.amazonaws.com",
-    "alchemykey": "1cb18a6fddb1709e55b6ce99b9ae94baa935b27e"
+    "accessKey": "Your access key",
+    "secretAccessKey": "Your secret access key",
+    "region": "Your region",
+    "queueUrl": "Your sqs url",
+    "snsTopicARN": "Your sns topic arn",
+    "elasticsearchendpoint": "YOur elasticsearch endpoint",
+    "alchemykey": "YOur alchemy key"
 }
