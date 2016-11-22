@@ -78,7 +78,7 @@ router.post('/notify', function (req, res) {
             //console.log("Tweet " + " with location: " + JSON.stringify(tweet.geo.coordinates) + "inserted.");
 
         });
-        io.sockets.emit('tweet', JSON.parse(JSON.parse(req.body).Message));
+        io.sockets.emit('tweet', tweet);
 
     } else if (req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
