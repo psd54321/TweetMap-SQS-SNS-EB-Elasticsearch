@@ -4,11 +4,11 @@ var workerpool = require('workerpool');
 var AlchemyLanguageV1 = require('watson-developer-cloud/alchemy-language/v1');
 
 var alchemy_language = new AlchemyLanguageV1({
-    api_key: '1cb18a6fddb1709e55b6ce99b9ae94baa935b27e'
+    api_key: awsconfig.alchemykey
 });
 
-var topics = ['trump','love','music','pizza','food','pumpkin','apple'];
-var i =0;
+var topics = ['trump', 'love', 'music', 'pizza', 'food', 'pumpkin', 'apple'];
+var i = 0;
 
 AWS.config.update({
     'accessKeyId': awsconfig.accessKey,
@@ -35,14 +35,14 @@ function TweetSentimentAnalysis(message) {
     var params = {
         text: obj.text
     };
-    console.log(obj.text)
+
     var lowercase = obj.text.toLowerCase();
-    for(i=0;i<topics.length;i++){
-        if(lowercase.indexOf(topics[i]) != -1){
+    for (i = 0; i < topics.length; i++) {
+        if (lowercase.indexOf(topics[i]) != -1) {
             obj.topic = topics[i];
         }
     }
-    console.log(obj.topic);
+
     alchemy_language.sentiment(params, function (err, response) {
         if (null != response && response.docSentiment != undefined && response.docSentiment.type != undefined) {
             obj.sentiment = response.docSentiment.type;

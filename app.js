@@ -19,10 +19,10 @@ var stopped = true;
 var pool = workerpool.pool(__dirname + '/controllers/worker.js');
 
 var client = new Twitter({
-    consumer_key: '1hkOv5wjdTaqxsRM91FGwjkRU',
-    consumer_secret: '04VmYHw6z56sSt1Ypm6BbgxweTLiM5ejFxdusWU7AqYYtP8Lf6',
-    access_token: '218215924-qk6PxJv342X46C3AwMNFFCI5raOa7coBYCFRXmGo',
-    access_token_secret: 'pKQKTqsm37kSFVysuKodhZ7BusEKZ8J9dS7Pv3jKjB4bY'
+    consumer_key: twitconfig.consumer_key,
+    consumer_secret: twitconfig.consumer_secret,
+    access_token: twitconfig.access_token,
+    access_token_secret: twitconfig.access_token_secret
 });
 
 var stream1 = client.stream('statuses/filter', {
@@ -32,11 +32,11 @@ var stream1 = client.stream('statuses/filter', {
 });
 
 var elasticsearch = new Elasticsearch({
-    accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
-    secretAccessKey: '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',
+    accessKeyId: awsconfig.accessKey,
+    secretAccessKey: awsconfig.secretAccessKey,
     service: 'es',
     region: 'us-east-1',
-    host: 'search-prathtweets-jqcnx3spdjo3rhy5zjzn4nusv4.us-east-1.es.amazonaws.com'
+    host: awsconfig.elasticsearchendpoint
 });
 
 AWS.config.update({
@@ -58,11 +58,6 @@ app.set('view engine', 'hbs');
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-
-//app.use(function (req, res, next) {
-//   res.io = io;
-//next();
-//});
 
 global.socketio = io;
 app.use(bodyParser.text());
@@ -152,19 +147,6 @@ stream1.on('tweet', function (tweet) {
     }
     if (tweet.geo != null) { // Insert into elastic search when tweet with location is found
 
-        // elasticsearch.index({
-        //index: 'twittersentiment',
-        //type: 'tweet',
-        //body: {
-        //'username': tweet.user.name,
-        //  'text': tweet.text,
-        //    'location': tweet.geo
-        //  }
-        //}, function (err, data) {
-        //  console.log("Tweet " + " with location: " + JSON.stringify(tweet.geo.coordinates) + "inserted.");
-
-        //});
-        //console.log("@#$##%%");
         var obj = {
             'username': tweet.user.name,
             'text': tweet.text,
@@ -190,8 +172,7 @@ io.on('connection', function (socket) {
     if (connectedCount == 1) {
         stopped = false;
         stream1.start();
-        console.log('Strem started');
-        //io.sockets.emit('tweet','message sent');
+        console.log('Stream started');
     }
 
     socket.on('disconnect', function () {

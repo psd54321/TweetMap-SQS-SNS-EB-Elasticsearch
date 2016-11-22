@@ -37,7 +37,7 @@ function initMap() {
     setInterval(function () {
         var combo = document.getElementById('style-selector');
         putMarkers(combo.value, map);
-    }, 30000);
+    }, 300000);
 }
 
 //To Do later
@@ -59,10 +59,10 @@ socket.on('tweet', function (obj) {
     var data = JSON.parse(obj);
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
-    //if (combo.value == data.topic) {
-    var location = data['location'];
-    console.log(location);
-    console.log(location['coordinates']);
+    if (combo.value == data.topic) {
+        var location = data['location'];
+        console.log(location);
+        console.log(location['coordinates']);
         marker = new google.maps.Marker({
             map: map,
             draggable: true,
@@ -70,8 +70,21 @@ socket.on('tweet', function (obj) {
             position: new google.maps.LatLng(location['coordinates'][0], location['coordinates'][1])
         });
 
+        switch (data.sentiment) {
+            case "neutral":
+                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                break;
+            case "positive":
+                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                break;
+            case "negative":
+                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+                break;
+            default:
+                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+        }
         marker.info = new google.maps.InfoWindow({
-            content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p>"
+            content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p><p> Sentiment Score : " + tweets[i]._source.sentiscore + "</p>"
         });
 
         google.maps.event.addListener(marker, 'click', function () {
@@ -79,7 +92,7 @@ socket.on('tweet', function (obj) {
             this.info.open(marker_map, this);
         });
         markers.push(marker);
-    //}
+    }
 });
 
 function putMarkers(searchterm, map) {
@@ -95,12 +108,24 @@ function putMarkers(searchterm, map) {
                         map: map,
                         draggable: true,
                         animation: google.maps.Animation.DROP,
-                        position: new google.maps.LatLng(tweets[i]._source.location.coordinates[0], tweets[i]._source.location.coordinates[1]),
-                        icon: 'icons/location_icon.svg'
+                        position: new google.maps.LatLng(tweets[i]._source.location.coordinates[0], tweets[i]._source.location.coordinates[1])
                     });
 
+                    switch (data.sentiment) {
+                        case "neutral":
+                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                            break;
+                        case "positive":
+                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                            break;
+                        case "negative":
+                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+                            break;
+                        default:
+                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                    }
                     marker.info = new google.maps.InfoWindow({
-                        content: "<div><h3>@" + tweets[i]._source.username + "</h3></div><p>" + tweets[i]._source.text + "</p>"
+                        content: "<div><h3>@" + tweets[i]._source.username + "</h3></div><p>" + tweets[i]._source.text + "</p><p> Sentiment Score : " + tweets[i]._source.sentiscore + "</p>"
                     });
 
                     google.maps.event.addListener(marker, 'click', function () {
@@ -248,315 +273,6 @@ var styles = {
                 color: '#9e9e9e'
             }]
       }
-    ],
-
-    night: [
-        {
-            elementType: 'geometry',
-            stylers: [{
-                color: '#242f3e'
-            }]
-        },
-        {
-            elementType: 'labels.text.stroke',
-            stylers: [{
-                color: '#242f3e'
-            }]
-        },
-        {
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#746855'
-            }]
-        },
-        {
-            featureType: 'administrative.locality',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#d59563'
-            }]
-      },
-        {
-            featureType: 'poi',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#d59563'
-            }]
-      },
-        {
-            featureType: 'poi.park',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#263c3f'
-            }]
-      },
-        {
-            featureType: 'poi.park',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#6b9a76'
-            }]
-      },
-        {
-            featureType: 'road',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#38414e'
-            }]
-      },
-        {
-            featureType: 'road',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#212a37'
-            }]
-      },
-        {
-            featureType: 'road',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#9ca5b3'
-            }]
-      },
-        {
-            featureType: 'road.highway',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#746855'
-            }]
-      },
-        {
-            featureType: 'road.highway',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#1f2835'
-            }]
-      },
-        {
-            featureType: 'road.highway',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#f3d19c'
-            }]
-      },
-        {
-            featureType: 'transit',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#2f3948'
-            }]
-      },
-        {
-            featureType: 'transit.station',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#d59563'
-            }]
-      },
-        {
-            featureType: 'water',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#17263c'
-            }]
-      },
-        {
-            featureType: 'water',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#515c6d'
-            }]
-      },
-        {
-            featureType: 'water',
-            elementType: 'labels.text.stroke',
-            stylers: [{
-                color: '#17263c'
-            }]
-      }
-    ],
-
-    retro: [
-        {
-            elementType: 'geometry',
-            stylers: [{
-                color: '#ebe3cd'
-            }]
-        },
-        {
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#523735'
-            }]
-        },
-        {
-            elementType: 'labels.text.stroke',
-            stylers: [{
-                color: '#f5f1e6'
-            }]
-        },
-        {
-            featureType: 'administrative',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#c9b2a6'
-            }]
-      },
-        {
-            featureType: 'administrative.land_parcel',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#dcd2be'
-            }]
-      },
-        {
-            featureType: 'administrative.land_parcel',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#ae9e90'
-            }]
-      },
-        {
-            featureType: 'landscape.natural',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#dfd2ae'
-            }]
-      },
-        {
-            featureType: 'poi',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#dfd2ae'
-            }]
-      },
-        {
-            featureType: 'poi',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#93817c'
-            }]
-      },
-        {
-            featureType: 'poi.park',
-            elementType: 'geometry.fill',
-            stylers: [{
-                color: '#a5b076'
-            }]
-      },
-        {
-            featureType: 'poi.park',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#447530'
-            }]
-      },
-        {
-            featureType: 'road',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#f5f1e6'
-            }]
-      },
-        {
-            featureType: 'road.arterial',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#fdfcf8'
-            }]
-      },
-        {
-            featureType: 'road.highway',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#f8c967'
-            }]
-      },
-        {
-            featureType: 'road.highway',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#e9bc62'
-            }]
-      },
-        {
-            featureType: 'road.highway.controlled_access',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#e98d58'
-            }]
-      },
-        {
-            featureType: 'road.highway.controlled_access',
-            elementType: 'geometry.stroke',
-            stylers: [{
-                color: '#db8555'
-            }]
-      },
-        {
-            featureType: 'road.local',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#806b63'
-            }]
-      },
-        {
-            featureType: 'transit.line',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#dfd2ae'
-            }]
-      },
-        {
-            featureType: 'transit.line',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#8f7d77'
-            }]
-      },
-        {
-            featureType: 'transit.line',
-            elementType: 'labels.text.stroke',
-            stylers: [{
-                color: '#ebe3cd'
-            }]
-      },
-        {
-            featureType: 'transit.station',
-            elementType: 'geometry',
-            stylers: [{
-                color: '#dfd2ae'
-            }]
-      },
-        {
-            featureType: 'water',
-            elementType: 'geometry.fill',
-            stylers: [{
-                color: '#b9d3c2'
-            }]
-      },
-        {
-            featureType: 'water',
-            elementType: 'labels.text.fill',
-            stylers: [{
-                color: '#92998d'
-            }]
-      }
-    ],
-
-    hiding: [
-        {
-            featureType: 'poi.business',
-            stylers: [{
-                visibility: 'off'
-            }]
-      },
-        {
-            featureType: 'transit',
-            elementType: 'labels.icon',
-            stylers: [{
-                visibility: 'off'
-            }]
-      }
     ]
+
 };

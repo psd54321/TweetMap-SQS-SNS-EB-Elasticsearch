@@ -7,14 +7,25 @@ var MessageValidator = require('sns-validator');
 var validator = new MessageValidator();
 validator.encoding = 'utf8';
 var AWS = require('aws-sdk');
+var twitconfig = require('../config/twitconfig');
 var sns = new AWS.SNS();
+var awsconfig = require('./config/awsconfig');
 
 var client = new Twitter({
-    consumer_key: '1hkOv5wjdTaqxsRM91FGwjkRU',
-    consumer_secret: '04VmYHw6z56sSt1Ypm6BbgxweTLiM5ejFxdusWU7AqYYtP8Lf6',
-    access_token: '218215924-qk6PxJv342X46C3AwMNFFCI5raOa7coBYCFRXmGo',
-    access_token_secret: 'pKQKTqsm37kSFVysuKodhZ7BusEKZ8J9dS7Pv3jKjB4bY'
+    consumer_key: twitconfig.consumer_key,
+    consumer_secret: twitconfig.consumer_secret,
+    access_token: twitconfig.access_token,
+    access_token_secret: twitconfig.access_token_secret
 });
+
+var elasticsearch = new Elasticsearch({
+    accessKeyId: awsconfig.accessKey,
+    secretAccessKey: awsconfig.secretAccessKey,
+    service: 'es',
+    region: 'us-east-1',
+    host: awsconfig.elasticsearchendpoint
+});
+
 
 /* GET home page */
 router.get('/', function (req, res) {
@@ -23,18 +34,11 @@ router.get('/', function (req, res) {
 
 
 router.get('/search/:searchq', function (req, res) {
-    var elasticsearch = new Elasticsearch({
-        accessKeyId: 'AKIAIVRI3JUCHHHOE4VQ',
-        secretAccessKey: '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',
-        service: 'es',
-        region: 'us-east-1',
-        host: 'search-prathtweets-jqcnx3spdjo3rhy5zjzn4nusv4.us-east-1.es.amazonaws.com'
-    });
 
     elasticsearch.search({
-        index: 'twitter',
+        index: 'twittersentimentanalysis',
         type: 'tweet',
-        size: 150,
+        size: 200,
         body: {
             query: {
                 term: {
@@ -54,10 +58,25 @@ router.post('/notify', function (req, res) {
     console.log(req.get('x-amz-sns-message-type'));
     if (req.get('x-amz-sns-message-type') == 'Notification') {
         console.log('inside notification');
-        var tweet = JSON.parse(JSON.parse(req.body).Message).text;
-        console.log(tweet);
-        io.sockets.emit('tweet', (JSON.parse(req.body).Message));
-       
+        var tweet = JSON.parse(JSON.parse(req.body).Message);
+        //console.log(tweet);
+
+        elasticsearch.index({
+            index: 'twittersentimentanalysis',
+            type: 'tweet',
+            body: {
+                'username': tweet.user.name,
+                'text': tweet.text,
+                'location': tweet.geo,
+                'sentiment': tweet.sentiment,
+                'sentiscore': tweet.sentiscore
+            }
+        }, function (err, data) {
+            //console.log("Tweet " + " with location: " + JSON.stringify(tweet.geo.coordinates) + "inserted.");
+
+        });
+        io.sockets.emit('tweet', tweet);
+
     } else if (req.get('x-amz-sns-message-type') == 'SubscriptionConfirmation') {
         console.log('inside subscription');
         var token = JSON.parse(req.body).Token;
