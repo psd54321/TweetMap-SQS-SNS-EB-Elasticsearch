@@ -60,7 +60,7 @@ socket.on('tweet', function (obj) {
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
     //if (combo.value == data.topic) {
-    var location = data.location;
+    var location = data['location'];
     console.log(location);
     console.log(location['coordinates']);
         marker = new google.maps.Marker({
