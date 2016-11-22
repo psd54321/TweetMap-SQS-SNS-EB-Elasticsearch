@@ -60,7 +60,7 @@ router.post('/notify', function (req, res) {
         console.log('inside notification');
         var tweet = JSON.parse(JSON.parse(req.body).Message);
         console.log(tweet);
-        console.log(tweet.user.name);
+        console.log(tweet.username);
         console.log(tweet.sentiment);
         console.log(tweet.sentiscore);
         console.log(tweet.geo);
@@ -68,9 +68,9 @@ router.post('/notify', function (req, res) {
             index: 'twittersentimentanalysis',
             type: 'tweet',
             body: {
-                'username': tweet.user.name,
+                'username': tweet.username,
                 'text': tweet.text,
-                'location': tweet.geo,
+                'location': tweet.location,
                 'sentiment': tweet.sentiment,
                 'sentiscore': tweet.sentiscore
             }
