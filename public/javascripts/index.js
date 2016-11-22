@@ -60,11 +60,14 @@ socket.on('tweet', function (obj) {
     var combo = document.getElementById('style-selector');
     //putMarkers(combo.value, map);
     //if (combo.value == data.topic) {
+    var location = data.location;
+    console.log(location);
+    console.log(location['coordinates']);
         marker = new google.maps.Marker({
             map: map,
             draggable: true,
             animation: google.maps.Animation.DROP,
-            position: new google.maps.LatLng(data.location.coordinates[0], data.location.coordinates[1])
+            position: new google.maps.LatLng(location['coordinates'][0], location['coordinates'][1])
         });
 
         marker.info = new google.maps.InfoWindow({
