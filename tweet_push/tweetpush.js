@@ -25,19 +25,8 @@ var stream = client.stream('statuses/filter', {track: topics}, {locations: ['-18
 
     stream.on('tweet', function(tweet) {
         if(tweet.geo != null) { // Insert into elastic search when tweet with location is found
-            console.log("Tweet: "+tweet.text);
+            console.log("Tweet: "+tweet);
 
-            elasticsearch.index({
-            index: 'twitter',
-            type: 'tweet',
-            body: {
-                'username': tweet.user.name,
-                    'text': tweet.text,
-                    'location': tweet.geo
-            }
-        }, function(err, data) {
-           console.log("Row "+err+"@@@@ "+JSON.stringify(data)+" with location: "+JSON.stringify(tweet.geo.coordinates));
-        });
             
         }
     });

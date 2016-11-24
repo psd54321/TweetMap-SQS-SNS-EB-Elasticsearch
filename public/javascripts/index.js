@@ -69,16 +69,16 @@ socket.on('tweet', function (data) {
 
         switch (data.sentiment) {
             case "neutral":
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                marker.setIcon('icons/blue-dot.png')
                 break;
             case "positive":
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                marker.setIcon('icons/green-dot.png')
                 break;
             case "negative":
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+                marker.setIcon('icons/red-dot.png')
                 break;
             default:
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                marker.setIcon('icons/blue-dot.png')
         }
         marker.info = new google.maps.InfoWindow({
             content: "<div><h3>@" + data.username + "</h3></div><p>" + data.text + "</p><p> Sentiment Score : " + data.sentiscore + "</p>"
@@ -110,16 +110,16 @@ function putMarkers(searchterm, map) {
 
                     switch (tweets[i]._source.sentiment) {
                         case "neutral":
-                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                            marker.setIcon('icons/blue-dot.png')
                             break;
                         case "positive":
-                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                            marker.setIcon('icons/green-dot.png')
                             break;
                         case "negative":
-                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+                            marker.setIcon('icons/red-dot.png')
                             break;
                         default:
-                            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                            marker.setIcon('icons/blue-dot.png')
                     }
                     marker.info = new google.maps.InfoWindow({
                         content: "<div><h3>@" + tweets[i]._source.username + "</h3></div><p>" + tweets[i]._source.text + "</p><p> Sentiment Score : " + tweets[i]._source.sentiscore + "</p>"
